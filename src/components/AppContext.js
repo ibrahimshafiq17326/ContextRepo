@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
 
 const AppReducer = (state, action) => {
   switch (action.type) {
@@ -20,20 +20,18 @@ const AppReducer = (state, action) => {
 };
 
 const initialState = {
-  //Propertites and Data for Context
-  budget: 2000,
-  expenses: [
-    { id: 1, name: "Ibrahim", cost: 550 },
-    { id: 2, name: "Zeeshan", cost: 450 },
-    { id: 3, name: "Ali", cost: 300 },
-  ],
+  budget: 5000,
+  expenses: JSON.parse(localStorage.getItem("expenses")) || [],
 };
 
 export const AppContext = createContext(); //creating the context
 
 export const AppProvider = (props) => {
-  debugger;
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  useEffect(() => {
+    localStorage.setItem("budget", JSON.stringify(state.budget));
+    localStorage.setItem("expenses", JSON.stringify(state.expenses));
+  });
 
   return (
     <AppContext.Provider
